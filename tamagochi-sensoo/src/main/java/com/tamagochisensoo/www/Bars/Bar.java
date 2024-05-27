@@ -8,6 +8,7 @@ public abstract class Bar {
     protected double value;
     protected Rectangle background;
     protected Rectangle bar;
+    protected Pane pane;
 
     public Bar(double value, double x, double y, double width, double height) {
         this.value = value;
@@ -16,6 +17,9 @@ public abstract class Bar {
 
         this.bar = new Rectangle(x,y,width*value/100, height);
         this.bar.setFill(getColor());
+
+        this.pane = new Pane();
+        this.pane.getChildren().addAll(this.background, this.bar);
     }
 
     protected abstract Color getColor();
@@ -38,5 +42,9 @@ public abstract class Bar {
             this.background, 
             this.bar
         );
+    }
+
+    public Pane getPane() {
+        return this.pane;
     }
 }
