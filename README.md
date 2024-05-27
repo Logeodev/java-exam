@@ -16,7 +16,7 @@ Qu'importe la raison (barres de faim ou de vie à 0) ou perte d'un combat, la cr
 
 ### Classes fonctionnelles
 
-:::mermaid
+```mermaid
 classDiagram
 
 class CreatureShape {
@@ -49,11 +49,11 @@ class Combat {
 Combat -- Combat : doCombat loops\nwith combatStep\nuntil one dies
 Creature --> Combat : Creature enters a Combat
 CreatureShape -- Creature : defines shape
-:::
+```
 
 ### Classes graphiques
 
-:::mermaid
+```mermaid
 classDiagram
 
 class Bar {
@@ -104,4 +104,4 @@ GameScreen .. LifeBar
 GameScreen .. HungerBar
 GameScreen .. ConfortBar
 GameScreen .. Room
-:::
+```
