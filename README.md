@@ -26,16 +26,17 @@ class CreatureShape {
 }
 
 class Creature {
-    -String color
+    -Color color
     -CreatureShape shape
     -double life
     -double hunger
     -double confort
 
-    +Creature(CreatureShape shape, String color)
+    +Creature(CreatureShape shape, Color color)
     +void eat()
     +void sleep()
     +double getAttackPower()
+    -void lifeThread()
 }
 
 class Combat {
@@ -81,9 +82,9 @@ class ConfortBar {
     +Color getColor()
 }
 
-Bar --|> LifeBar
-Bar --|> HungerBar
-Bar --|> ConfortBar
+LifeBar <|-- Bar
+HungerBar <|-- Bar
+ConfortBar <|-- Bar
 
 class Room {
     <<abstract>>
@@ -95,13 +96,40 @@ class Room {
     #Color getBackgroundColor()
 }
 
-class GameScreen {
-    +void start()
-    +void main()
+class LivingRoom {
+    -Creature creature
+    -Button feedBtn
+    -Button fightBtn
+
+    +LivingRoom(double x, double y, double width, double height, Creature creature)
+    +Color getBackgroundColor()
+    -void makeFeedingButton()
+    -void makeJoinFightButton()
 }
 
-GameScreen .. LifeBar
-GameScreen .. HungerBar
-GameScreen .. ConfortBar
-GameScreen .. Room
+LivingRoom <|-- Room
+
+class CombatRoom {
+    +CombatRoom(double x, double y, double width, double height)
+    +Color getBackgroundColor()
+}
+
+CombatRoom <|-- Room
+
+class App {
+    -Scene scene
+    -Room currentRoom
+
+    +void main()
+    +void start(Stage stage)
+    -void showLauncherScreen(Stage stage)
+    -void startNewGame(Stage stage, Creature c)
+    -void showPersonalizationScreen(Stage stage)
+}
+
+LivingRoom .. LifeBar
+LivingRoom .. HungerBar
+LivingRoom .. ConfortBar
+App .. LivingRoom
+App .. CombatRoom
 ```

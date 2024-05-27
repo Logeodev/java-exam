@@ -21,7 +21,7 @@ public class CombatRoom extends Room {
     }
 
     @Override
-    protected Color getBackgroundColor() {
+    public Color getBackgroundColor() {
         return Color.LIGHTCORAL;
     }
 
