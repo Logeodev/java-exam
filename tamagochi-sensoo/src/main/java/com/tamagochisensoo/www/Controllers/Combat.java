@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tamagochisensoo.www.Creature.Creature;
+import com.tamagochisensoo.www.Exceptions.FightNotFoundException;
 
 public class Combat {
     private ServerSocket server;
@@ -14,8 +15,12 @@ public class Combat {
     private PrintWriter[] outs = new PrintWriter[2];
     private List<Creature> adversaries;
 
-    public Combat(int port, Creature adv1, Creature adv2) throws IOException {
-        this.server = new ServerSocket(port);
+    public Combat(int port, Creature adv1, Creature adv2) throws FightNotFoundException {
+        try {
+            this.server = new ServerSocket(port);
+        } catch (IOException e) {
+            throw new FightNotFoundException("Fight Not Found :\nNo connection to " + port + " could be established.");
+        }
         this.adversaries = new ArrayList<>();
         adversaries.add(adv1);
         adversaries.add(adv2);

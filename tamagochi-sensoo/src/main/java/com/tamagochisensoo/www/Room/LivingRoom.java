@@ -49,7 +49,7 @@ public class LivingRoom extends Room {
         fightBtn.setLayoutX(700);
         fightBtn.setLayoutY(150);
         fightBtn.setOnAction(evnt -> {
-
+            this.pane.getChildren().add(new CombatRoom(0,0,800,800).getPane());
         });
     }
 
