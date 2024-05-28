@@ -19,7 +19,7 @@ public class Combat {
         try {
             this.server = new ServerSocket(port);
         } catch (IOException e) {
-            throw new FightNotFoundException("Fight Not Found :\nNo connection to " + port + " could be established.");
+            throw new FightNotFoundException(Integer.toString(port));
         }
         this.adversaries = new ArrayList<>();
         adversaries.add(adv1);

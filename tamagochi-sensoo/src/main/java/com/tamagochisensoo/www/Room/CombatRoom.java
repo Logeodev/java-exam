@@ -5,21 +5,27 @@ import java.io.IOException;
 import com.tamagochisensoo.www.Controllers.Combat;
 import com.tamagochisensoo.www.Exceptions.FightNotFoundException;
 
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 public class CombatRoom extends Room {
     private Combat fightInstance;
     private TextField serverField;
 
-    public CombatRoom(double x, double y, double width, double height) {
-        super(x, y, width, height);
+    public CombatRoom(double x, double y, double width, double height, Stage stage) {
+        super(x, y, width, height, stage);
         
         makeJoinPage();
+
+        Scene scene = new Scene(pane, 800, 800);
+        stage.setScene(scene);
+        stage.show();
     }
 
     @Override
@@ -32,7 +38,7 @@ public class CombatRoom extends Room {
         serverField = new TextField();
         HBox hb = new HBox();
         hb.getChildren().addAll(serverLabel, serverField);
-        hb.setSpacing(10);
+        hb.setSpacing(5);
 
         VBox vb = new VBox();
         Button joinBtn = new Button("Join fight instance");
@@ -52,7 +58,7 @@ public class CombatRoom extends Room {
             fightInstance = new Combat(0, null, null);
             fightInstance.doCombat();
         } catch (FightNotFoundException fnf) {
-            
+
         } catch (IOException e) {
             e.printStackTrace();
         }

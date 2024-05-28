@@ -15,12 +15,20 @@ import javafx.scene.shape.*;
 import javafx.util.Duration;
 
 public class Creature {
-    private Color color;
-    private CreatureShape shape;
+    // -- Stats attributes --
     private double life = 100;
     private double hunger = 100;
     private double confort = 100;
+    
+    // -- Viusal attributes --
     private Pane pane;
+
+    private Color color;
+    private CreatureShape shape;
+    private double posX = 400;
+    private double posY = 400;
+    private double height = 60;
+    private double width = 60;
 
     public double barsWidth = 200;
     public double barsHeigth = 20;
@@ -37,28 +45,26 @@ public class Creature {
         this.pane = new Pane();
 
         // -- Main shape of creature --
-        double height = 60;
-        double width = 60;
         Shape displayShape = new Rectangle();
         switch (this.shape) {
             case OVAL:
-                displayShape = new Circle(400, 400, height);
+                displayShape = new Circle(posX, posY, height);
                 break;
             case SQUARE:
-                displayShape = new Rectangle(350, 400, width*2, height*2);
+                displayShape = new Rectangle(posX - width, posY, width*2, height*2);
                 break;
         }
         displayShape.setFill(this.color);
         this.pane.getChildren().add(displayShape);
 
-        // -- Creature get eyes --
+        // -- Creature gets eyes --
         for (int i = 0; i < 2; i++) {
-            double eyeX = (i == 0) ? 370 : 430;
+            double eyeX = (i == 0) ? posX - 30 : posX + 30;
 
-            Circle eyeWhite = new Circle(eyeX, 420, 10);
+            Circle eyeWhite = new Circle(eyeX, posY + 20, 10);
             eyeWhite.setFill(Color.WHITE);
 
-            Circle eyeBlack = new Circle(eyeX, 420, 5);
+            Circle eyeBlack = new Circle(eyeX, posY + 20, 5);
             eyeBlack.setFill(Color.BLACK);
 
             this.pane.getChildren().addAll(eyeWhite, eyeBlack);
@@ -99,6 +105,12 @@ public class Creature {
     }
     public Bar[] getBars() {
         return bars;
+    }
+    public void setPosX(double posX) {
+        this.posX = posX;
+    }
+    public void setPosY(double posY) {
+        this.posY = posY;
     }
 
     // --- METHODS ---

@@ -53,7 +53,7 @@ public class App extends Application {
     }
 
     private void startNewGame(Stage stage, Creature c) {
-        currentRoom = new LivingRoom(0, 0, 800, 800, c);
+        currentRoom = new LivingRoom(0, 0, 800, 800, c, stage);
         currentRoom.getPane().getChildren().add(c.getPane());
 
         Bar[] bars = c.getBars();

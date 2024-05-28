@@ -3,8 +3,10 @@ package com.tamagochisensoo.www.Room;
 import com.tamagochisensoo.www.Creature.Creature;
 
 import javafx.animation.PauseTransition;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class LivingRoom extends Room {
@@ -12,16 +14,23 @@ public class LivingRoom extends Room {
     private Button feedBtn;
     private Button fightBtn;
     private Button sleepBtn;
+    private Button quitBtn;
 
-    public LivingRoom(double x, double y, double width, double height, Creature creature) {
-        super(x, y, width, height);
+    public LivingRoom(double x, double y, double width, double height, Creature creature, Stage stage) {
+        super(x, y, width, height, stage);
         this.creature = creature;
 
         makeFeedingButton();
         makeSleepButton();
         makeJoinFightButton();
+        makeQuitButton();
 
-        this.pane.getChildren().addAll(feedBtn, sleepBtn, fightBtn);
+        this.pane.getChildren().addAll(feedBtn, sleepBtn, fightBtn, quitBtn);
+
+        Scene scene = new Scene(this.pane, 800,800);
+        stage.setTitle("Creature Personalization");
+        stage.setScene(scene);
+        stage.show();
     }
 
     @Override
@@ -31,7 +40,7 @@ public class LivingRoom extends Room {
 
     private void makeFeedingButton() {
         feedBtn = new Button("Feed");
-        feedBtn.setLayoutX(700);
+        feedBtn.setLayoutX(600);
         feedBtn.setLayoutY(50);
         feedBtn.setOnAction(evnt -> {
             creature.eat();
@@ -46,16 +55,16 @@ public class LivingRoom extends Room {
 
     private void makeJoinFightButton() {
         fightBtn = new Button("Search a fight");
-        fightBtn.setLayoutX(700);
+        fightBtn.setLayoutX(600);
         fightBtn.setLayoutY(150);
         fightBtn.setOnAction(evnt -> {
-            this.pane.getChildren().add(new CombatRoom(0,0,800,800).getPane());
+            new CombatRoom(0,0,800,800, stage);
         });
     }
 
     private void makeSleepButton() {
         sleepBtn = new Button("Sleep");
-        sleepBtn.setLayoutX(700);
+        sleepBtn.setLayoutX(600);
         sleepBtn.setLayoutY(100);
         sleepBtn.setOnAction(evnt -> {
             creature.sleep();
@@ -65,6 +74,15 @@ public class LivingRoom extends Room {
             );
             pause.setOnFinished(e -> sleepBtn.setDisable(false));
             pause.play();
+        });
+    }
+
+    private void makeQuitButton() {
+        quitBtn = new Button("Save and quit game");
+        quitBtn.setLayoutX(600);
+        quitBtn.setLayoutY(200);
+        quitBtn.setOnAction(evnt -> {
+            stage.close();
         });
     }
 }
