@@ -17,7 +17,6 @@ import com.tamagochisensoo.www.Creature.Creature;
 import com.tamagochisensoo.www.Creature.CreatureShape;
 import com.tamagochisensoo.www.Room.*;
 
-
 public class App extends Application {
 
     private static Scene scene;
@@ -66,7 +65,7 @@ public class App extends Application {
         StackPane root = new StackPane();
         root.getChildren().addAll(currentRoom.getPane());
 
-        scene = new Scene(root, 800, 600);
+        scene = new Scene(root, 800, 800);
         stage.setTitle("Tamagochi Sensoo");
         stage.setScene(scene);
         stage.show();

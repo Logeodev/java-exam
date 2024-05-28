@@ -27,7 +27,6 @@ public abstract class Bar {
             public void changed(ObservableValue<? extends Number> obs, Number oldVal, Number newVal) {
                 double newValue = newVal.doubleValue();
                 double newWidth = width * newValue / 100;
-                System.out.println("here !");
                 bar.setWidth(newWidth);
                 bar.setFill(getColor());
             }

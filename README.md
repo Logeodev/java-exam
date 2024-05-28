@@ -40,11 +40,17 @@ class Creature {
 }
 
 class Combat {
-    -Creature[] adversaries
+    -ServerSocket server
+    -Socket[] sockets = new Socket[2]
+    -BufferedReader[] ins = new BufferedReader[2]
+    -PrintWriter[] outs = new PrintWriter[2]
+    -List<Creature> adversaries
     
     +Combat(Creature adv1, Creature adv2)
     +void doCombat()
     -void combatStep()
+    +void finishCombat()
+    -boolean somebodyDied()
 }
 
 Combat -- Combat : doCombat loops\nwith combatStep\nuntil one dies

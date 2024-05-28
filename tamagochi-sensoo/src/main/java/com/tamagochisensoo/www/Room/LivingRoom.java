@@ -11,15 +11,17 @@ public class LivingRoom extends Room {
     private Creature creature;
     private Button feedBtn;
     private Button fightBtn;
+    private Button sleepBtn;
 
     public LivingRoom(double x, double y, double width, double height, Creature creature) {
         super(x, y, width, height);
         this.creature = creature;
 
         makeFeedingButton();
+        makeSleepButton();
         makeJoinFightButton();
 
-        this.pane.getChildren().addAll(feedBtn, fightBtn);
+        this.pane.getChildren().addAll(feedBtn, sleepBtn, fightBtn);
     }
 
     @Override
@@ -45,9 +47,24 @@ public class LivingRoom extends Room {
     private void makeJoinFightButton() {
         fightBtn = new Button("Search a fight");
         fightBtn.setLayoutX(700);
-        fightBtn.setLayoutY(100);
+        fightBtn.setLayoutY(150);
         fightBtn.setOnAction(evnt -> {
 
+        });
+    }
+
+    private void makeSleepButton() {
+        sleepBtn = new Button("Sleep");
+        sleepBtn.setLayoutX(700);
+        sleepBtn.setLayoutY(100);
+        sleepBtn.setOnAction(evnt -> {
+            creature.sleep();
+            sleepBtn.setDisable(true);
+            PauseTransition pause = new PauseTransition(
+                Duration.seconds(20)
+            );
+            pause.setOnFinished(e -> sleepBtn.setDisable(false));
+            pause.play();
         });
     }
 }

@@ -103,14 +103,14 @@ public class Creature {
 
     // --- METHODS ---
     public void eat() {
-        setHunger(hunger +10);
+        setHunger(hunger + 40);
         if (this.hunger > 100) {
             setHunger(100);
         }
     }
     public void sleep() {
         setLife(100);
-        setConfort(confort + 20);
+        setConfort(confort + 60);
         if (this.confort > 100) {
             setConfort(100);
         }
@@ -144,6 +144,12 @@ public class Creature {
                         setHunger(hunger - 10);
                         if (this.hunger < 0) {
                             setHunger(0);
+                        }
+                    }
+                    if ((this.hunger < 10 || this.confort < 8) && rnd.nextBoolean()) {
+                        setLife(life - 5);
+                        if (this.life < 0) {
+                            setLife(0);
                         }
                     }
             })
