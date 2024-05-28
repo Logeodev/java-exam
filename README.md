@@ -56,6 +56,26 @@ class Combat {
 Combat -- Combat : doCombat loops\nwith combatStep\nuntil one dies
 Creature --> Combat : Creature enters a Combat
 CreatureShape -- Creature : defines shape
+
+class CreatureBean {
+    <<bean>>
+    +long id
+    +String shape
+    +String color
+    +double life
+    +double hunger
+    +double confort
+}
+
+class WinBean {
+    <<bean>>
+    +long creatureId
+    +date date_win
+}
+
+Creature --> CreatureBean : stores state\nin BD
+Combat --> WinBean : stores win\ninDB
+CreatureBean .. WinBean : winning list
 ```
 
 ### Classes graphiques
