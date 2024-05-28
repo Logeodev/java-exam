@@ -15,6 +15,7 @@ import java.io.IOException;
 import com.tamagochisensoo.www.Bars.*;
 import com.tamagochisensoo.www.Creature.Creature;
 import com.tamagochisensoo.www.Creature.CreatureShape;
+import com.tamagochisensoo.www.Exceptions.NoConfigFileException;
 import com.tamagochisensoo.www.JDBC.connection.DatabaseConnection;
 import com.tamagochisensoo.www.Room.*;
 
@@ -98,7 +99,12 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        new DatabaseConnection().initializeDatabase();
+        try {
+            new DatabaseConnection().initializeDatabase();
+        } catch (NoConfigFileException e) {
+            System.out.println("Issue with the configuration file.");
+            e.printStackTrace();
+        }
         launch();
     }
 

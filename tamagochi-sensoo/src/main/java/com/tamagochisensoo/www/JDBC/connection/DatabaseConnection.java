@@ -1,11 +1,32 @@
 package com.tamagochisensoo.www.JDBC.connection;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 
+import org.ini4j.Ini;
+import org.ini4j.InvalidFileFormatException;
+
+import com.tamagochisensoo.www.Exceptions.NoConfigFileException;
+
 public class DatabaseConnection {
-    protected final String url = "jdbc:mysql://localhost:3360/TamagochiSensoo";
-    protected final String username = "root";
-    protected final String password = "root";
+    private Ini config;
+    protected final String url;
+    protected final String username;
+    protected final String password;
+
+    public DatabaseConnection() throws NoConfigFileException {
+        try {
+            config = new Ini(new File("./tamagochi-sensoo/config.ini"));
+        } catch (InvalidFileFormatException e) {
+            throw new NoConfigFileException(e.toString());
+        } catch (IOException e) {
+            throw new NoConfigFileException(e.toString());
+        }
+        url = config.get("database", "url");
+        username = config.get("database", "username");
+        password = config.get("database", "password");
+    }
 
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, username, password);
