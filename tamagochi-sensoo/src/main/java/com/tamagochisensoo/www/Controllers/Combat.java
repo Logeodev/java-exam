@@ -1,4 +1,4 @@
-package com.tamagochisensoo.www;
+package com.tamagochisensoo.www.Controllers;
 
 import java.io.*;
 import java.net.*;
@@ -14,7 +14,6 @@ public class Combat {
     private PrintWriter[] outs = new PrintWriter[2];
     private List<Creature> adversaries;
 
-    @SuppressWarnings("exports")
     public Combat(int port, Creature adv1, Creature adv2) throws IOException {
         this.server = new ServerSocket(port);
         this.adversaries = new ArrayList<>();

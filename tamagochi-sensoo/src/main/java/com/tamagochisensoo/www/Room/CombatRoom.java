@@ -2,7 +2,7 @@ package com.tamagochisensoo.www.Room;
 
 import java.io.IOException;
 
-import com.tamagochisensoo.www.Combat;
+import com.tamagochisensoo.www.Controllers.Combat;
 
 import javafx.scene.paint.Color;
 
