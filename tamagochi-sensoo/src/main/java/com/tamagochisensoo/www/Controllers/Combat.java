@@ -8,11 +8,10 @@ import java.util.List;
 import com.tamagochisensoo.www.Creature.Creature;
 import com.tamagochisensoo.www.Exceptions.FightNotFoundException;
 
-public class Combat {
+public class Combat extends Thread {
     private ServerSocket server;
-    private Socket[] sockets = new Socket[2];
-    private BufferedReader[] ins = new BufferedReader[2];
-    private PrintWriter[] outs = new PrintWriter[2];
+    private Socket socket;
+    private PrintWriter out;
     private List<Creature> adversaries;
 
     public Combat(int port, Creature adv1, Creature adv2) throws FightNotFoundException {
@@ -27,17 +26,10 @@ public class Combat {
     }
 
     public void doCombat() throws IOException {
-        for (int i = 0; i < adversaries.size(); i++) {
-            sockets[i] = server.accept();
-            ins[i] = new BufferedReader(
-                new InputStreamReader(
-                    sockets[i].getInputStream()
-                )
-            );
-            outs[i] = new PrintWriter(
-                sockets[i].getOutputStream(), true
-            );
-        }
+        socket = server.accept();
+        out = new PrintWriter(
+            socket.getOutputStream(), true
+        );
 
         while (!somebodyDied()) {
             combatStep();
@@ -45,16 +37,25 @@ public class Combat {
 
         finishCombat();
 
-        for (int i = 0; i < 2; i++) {
-            sockets[i].close();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
+        socket.close();
         server.close();
     }
 
     public void combatStep() {
         for (int i = 0; i < 2; i++) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             double power = adversaries.get(i).getAttackPower();
-            outs[i].println("Power = " + power);
+            out.println("Power = " + power);
             adversaries.get((i+1)%2).setLife(
                 adversaries.get((i+1)%2).getLife() - power
             );
@@ -72,15 +73,23 @@ public class Combat {
             .filter(adv -> adv.getLife() <= 0)
             .findFirst()
             .get();
-        winner.setConfort(100);
-        loser.setConfort(1);
-        loser.setHunger(1);
+            winner.setConfort(100);
+            loser.setConfort(1);
+            loser.setHunger(1);
 
-        outs[adversaries.indexOf(loser)].println("You lost.");
-        outs[adversaries.indexOf(winner)].println("You won !");
+        out.println("WIN " + winner.getId());
     }
 
     private boolean somebodyDied () {
         return adversaries.stream().anyMatch(adv -> adv.getLife() <= 0);
+    }
+
+    @Override
+    public void run() {
+        try {
+            doCombat();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

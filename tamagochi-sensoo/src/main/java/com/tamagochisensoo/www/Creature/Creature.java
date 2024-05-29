@@ -147,7 +147,11 @@ public class Creature {
     }
     public double getAttackPower() {
         Random rand = new Random();
-        return ((this.life + this.hunger + this.confort) / 3) * (rand.nextDouble());
+        // calculate coeficient 
+        // so instead of a random between [0,1]
+        // we get between [0.1, 0.6]
+        double coef =  0.1 + 0.5 * rand.nextDouble();
+        return ((this.life + this.hunger + this.confort) / 3) * (coef);
     }
 
     public Pane getPane() {
