@@ -2,9 +2,7 @@ package com.tamagochisensoo.www;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.StackPane;
@@ -17,6 +15,7 @@ import com.tamagochisensoo.www.Creature.Creature;
 import com.tamagochisensoo.www.Creature.CreatureShape;
 import com.tamagochisensoo.www.Exceptions.NoConfigFileException;
 import com.tamagochisensoo.www.JDBC.connection.DatabaseConnection;
+import com.tamagochisensoo.www.JDBC.daos.CreatureDao;
 import com.tamagochisensoo.www.Room.*;
 
 public class App extends Application {
@@ -32,14 +31,14 @@ public class App extends Application {
 
     private void showLauncherScreen(Stage stage) {
         VBox launcherLayout = new VBox();
-        Button startNewGameButton = new Button("Start New Game");
-        startNewGameButton.setOnAction(e -> {
+        Button startGameButton = new Button("Start New Game");
+        startGameButton.setOnAction(e -> {
             showPersonalizationScreen(stage);
         });
 
         Button resumeGameButton = new Button("Resume Game");
         resumeGameButton.setOnAction(e -> {
-            // Add logic to resume a game
+            showResumeGameScreen(stage);
         });
 
         Button quitButton = new Button("Quit");
@@ -47,14 +46,14 @@ public class App extends Application {
             stage.close();
         });
 
-        launcherLayout.getChildren().addAll(startNewGameButton, resumeGameButton, quitButton);
+        launcherLayout.getChildren().addAll(startGameButton, resumeGameButton, quitButton);
         Scene launcherScene = new Scene(launcherLayout, 800, 800);
         stage.setTitle("Tamagochi Sensoo Launcher");
         stage.setScene(launcherScene);
         stage.show();
     }
 
-    private void startNewGame(Stage stage, Creature c) {
+    private void startGame(Stage stage, Creature c) {
         currentRoom = new LivingRoom(0, 0, 800, 800, c, stage);
         currentRoom.getPane().getChildren().add(c.getPane());
 
@@ -87,7 +86,7 @@ public class App extends Application {
             CreatureShape selectedShape = shapeCbb.getValue();
             Color selectedColor = colorPicker.getValue();
             Creature c = new Creature(selectedColor, selectedShape);
-            startNewGame(stage, c);
+            startGame(stage, c);
         });
 
         personalizationLayout.getChildren().addAll(shapeCbb, colorPicker, startGame);
@@ -96,6 +95,32 @@ public class App extends Application {
         stage.setTitle("Creature Personalization");
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void showResumeGameScreen(Stage stage) {
+
+        try {
+
+            VBox vb = new VBox();
+            Label listLabel = new Label("Select a creature");
+
+            ListView<Creature> lv = new CreatureDao().makeListView();
+
+            Button resumeBtn = new Button("Resume game");
+            resumeBtn.setDisable(lv.getSelectionModel().getSelectedItem() == null);
+            resumeBtn.disableProperty().bind(lv.getSelectionModel().selectedItemProperty().isNull());
+            resumeBtn.setOnAction(evnt -> {
+                Creature selectedCreature = lv.getSelectionModel().getSelectedItem();
+                startGame(stage, selectedCreature);
+            });
+
+            vb.getChildren().setAll(listLabel, lv, resumeBtn);
+
+            stage.setScene(new Scene(vb, 800, 800));
+            stage.show();
+        } catch (NoConfigFileException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

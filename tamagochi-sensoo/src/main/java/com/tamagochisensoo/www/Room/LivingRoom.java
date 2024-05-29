@@ -1,6 +1,8 @@
 package com.tamagochisensoo.www.Room;
 
 import com.tamagochisensoo.www.Creature.Creature;
+import com.tamagochisensoo.www.Exceptions.NoConfigFileException;
+import com.tamagochisensoo.www.JDBC.daos.CreatureDao;
 
 import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
@@ -19,6 +21,7 @@ public class LivingRoom extends Room {
     public LivingRoom(double x, double y, double width, double height, Creature creature, Stage stage) {
         super(x, y, width, height, stage);
         this.creature = creature;
+        this.creature.startLifeCycle();
 
         makeFeedingButton();
         makeSleepButton();
@@ -54,10 +57,11 @@ public class LivingRoom extends Room {
     }
 
     private void makeJoinFightButton() {
-        fightBtn = new Button("Search a fight");
+        fightBtn = new Button("Make a fight");
         fightBtn.setLayoutX(600);
         fightBtn.setLayoutY(150);
         fightBtn.setOnAction(evnt -> {
+            creature.interruptLifeCycle();
             new CombatRoom(0,0,800,800, stage);
         });
     }
@@ -82,6 +86,11 @@ public class LivingRoom extends Room {
         quitBtn.setLayoutX(600);
         quitBtn.setLayoutY(200);
         quitBtn.setOnAction(evnt -> {
+            try {
+                new CreatureDao().save(creature);
+            } catch (NoConfigFileException e) {
+                e.printStackTrace();
+            }
             stage.close();
         });
     }

@@ -6,6 +6,8 @@ import com.tamagochisensoo.www.Bars.Bar;
 import com.tamagochisensoo.www.Bars.ConfortBar;
 import com.tamagochisensoo.www.Bars.HungerBar;
 import com.tamagochisensoo.www.Bars.LifeBar;
+import com.tamagochisensoo.www.Exceptions.NoConfigFileException;
+import com.tamagochisensoo.www.JDBC.daos.CreatureDao;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -15,6 +17,9 @@ import javafx.scene.shape.*;
 import javafx.util.Duration;
 
 public class Creature {
+    private double id = -1;
+    private Timeline lifecycle;
+
     // -- Stats attributes --
     private double life = 100;
     private double hunger = 100;
@@ -69,9 +74,6 @@ public class Creature {
 
             this.pane.getChildren().addAll(eyeWhite, eyeBlack);
         }
-
-        // -- Life is hard --
-        lifeIsHard();
     }
 
     // --- SETTERS ---
@@ -86,6 +88,9 @@ public class Creature {
     public void setHunger(double hunger) {
         this.hunger = hunger;
         this.bars[1].setValue(hunger);
+    }
+    public void setId(double id) {
+        this.id = id;
     }
     // --- GETTERS ---
     public Color getColor() {
@@ -112,8 +117,17 @@ public class Creature {
     public void setPosY(double posY) {
         this.posY = posY;
     }
+    public double getId() {
+        return id;
+    }
 
     // --- METHODS ---
+    @Override
+    public String toString() {
+        return this.shape.name() + " : " + 
+        "HP " + this.life + "/FP " + this.hunger + "/CP " + this.confort;
+    }
+
     public void eat() {
         setHunger(hunger + 40);
         if (this.hunger > 100) {
@@ -140,9 +154,9 @@ public class Creature {
         return this.pane;
     }
 
-    private void lifeIsHard() {
+    public void startLifeCycle() {
         Random rnd = new Random();
-        Timeline timeline = new Timeline(
+        lifecycle = new Timeline(
             new KeyFrame(
                 Duration.seconds(5), 
                 event -> {
@@ -164,9 +178,24 @@ public class Creature {
                             setLife(0);
                         }
                     }
+                    try {
+                        new CreatureDao().save(this);
+                    } catch (NoConfigFileException e) {
+                        e.printStackTrace();
+                    }
             })
         );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+        lifecycle.setCycleCount(Timeline.INDEFINITE);
+        lifecycle.play();
+    }
+
+    public void interruptLifeCycle() {
+        try {
+            lifecycle.stop();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }finally {
+            lifecycle = null;
+        }
     }
 }
