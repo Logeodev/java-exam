@@ -1,5 +1,6 @@
 package com.tamagochisensoo.www.Room;
 
+import com.tamagochisensoo.www.Bars.Bar;
 import com.tamagochisensoo.www.Creature.Creature;
 import com.tamagochisensoo.www.Exceptions.NoConfigFileException;
 import com.tamagochisensoo.www.JDBC.daos.CreatureDao;
@@ -22,13 +23,17 @@ public class LivingRoom extends Room {
         super(x, y, width, height, stage);
         this.creature = creature;
         this.creature.startLifeCycle();
+        creature.setPosX(350);
 
         makeFeedingButton();
         makeSleepButton();
         makeJoinFightButton();
         makeQuitButton();
 
-        this.pane.getChildren().addAll(feedBtn, sleepBtn, fightBtn, quitBtn);
+        this.pane.getChildren().addAll(feedBtn, sleepBtn, fightBtn, quitBtn, creature.getPane());
+        for (Bar bars : creature.getBars()) {
+            pane.getChildren().add(bars.getPane());
+        }
 
         Scene scene = new Scene(this.pane, 800,800);
         stage.setTitle("Creature Personalization");
@@ -62,7 +67,7 @@ public class LivingRoom extends Room {
         fightBtn.setLayoutY(150);
         fightBtn.setOnAction(evnt -> {
             creature.interruptLifeCycle();
-            new CombatRoom(0,0,800,800, stage);
+            new JoiningFightRoom(0,0,800,800, stage);
         });
     }
 

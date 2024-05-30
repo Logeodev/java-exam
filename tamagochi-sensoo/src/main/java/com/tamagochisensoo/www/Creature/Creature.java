@@ -47,33 +47,7 @@ public class Creature {
         this.color = color;
         this.shape = shape;
 
-        this.pane = new Pane();
-
-        // -- Main shape of creature --
-        Shape displayShape = new Rectangle();
-        switch (this.shape) {
-            case OVAL:
-                displayShape = new Circle(posX, posY, height);
-                break;
-            case SQUARE:
-                displayShape = new Rectangle(posX - width, posY, width*2, height*2);
-                break;
-        }
-        displayShape.setFill(this.color);
-        this.pane.getChildren().add(displayShape);
-
-        // -- Creature gets eyes --
-        for (int i = 0; i < 2; i++) {
-            double eyeX = (i == 0) ? posX - 30 : posX + 30;
-
-            Circle eyeWhite = new Circle(eyeX, posY + 20, 10);
-            eyeWhite.setFill(Color.WHITE);
-
-            Circle eyeBlack = new Circle(eyeX, posY + 20, 5);
-            eyeBlack.setFill(Color.BLACK);
-
-            this.pane.getChildren().addAll(eyeWhite, eyeBlack);
-        }
+        this.pane = getPane();
     }
 
     // --- SETTERS ---
@@ -91,6 +65,12 @@ public class Creature {
     }
     public void setId(double id) {
         this.id = id;
+    }
+    public void setPosX(double posX) {
+        this.posX = posX;
+    }
+    public void setPosY(double posY) {
+        this.posY = posY;
     }
     // --- GETTERS ---
     public Color getColor() {
@@ -111,14 +91,14 @@ public class Creature {
     public Bar[] getBars() {
         return bars;
     }
-    public void setPosX(double posX) {
-        this.posX = posX;
-    }
-    public void setPosY(double posY) {
-        this.posY = posY;
-    }
     public double getId() {
         return id;
+    }
+    public double getPosX() {
+        return posX;
+    }
+    public double getPosY() {
+        return posY;
     }
 
     // --- METHODS ---
@@ -151,10 +131,37 @@ public class Creature {
         // so instead of a random between [0,1]
         // we get between [0.1, 0.6]
         double coef =  0.1 + 0.5 * rand.nextDouble();
-        return ((this.life + this.hunger + this.confort) / 3) * (coef);
+        double attack = ((this.life + this.hunger + this.confort) / 3) * coef;
+        return Math.round(attack);
     }
 
     public Pane getPane() {
+        this.pane = new Pane();
+        // -- Main shape of creature --
+        Shape displayShape = new Rectangle();
+        switch (this.shape) {
+            case OVAL:
+                displayShape = new Circle(posX, posY, height);
+                break;
+            case SQUARE:
+                displayShape = new Rectangle(posX - width, posY, width*2, height*2);
+                break;
+        }
+        displayShape.setFill(this.color);
+        this.pane.getChildren().add(displayShape);
+
+        // -- Creature gets eyes --
+        for (int i = 0; i < 2; i++) {
+            double eyeX = (i == 0) ? posX - 30 : posX + 30;
+
+            Circle eyeWhite = new Circle(eyeX, posY + 20, 10);
+            eyeWhite.setFill(Color.WHITE);
+
+            Circle eyeBlack = new Circle(eyeX, posY + 20, 5);
+            eyeBlack.setFill(Color.BLACK);
+
+            this.pane.getChildren().addAll(eyeWhite, eyeBlack);
+        }
         return this.pane;
     }
 

@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.tamagochisensoo.www.Creature.Creature;
 import com.tamagochisensoo.www.Exceptions.FightNotFoundException;
+import com.tamagochisensoo.www.Exceptions.NoConfigFileException;
+import com.tamagochisensoo.www.JDBC.daos.CreatureDao;
 
 public class Combat extends Thread {
     private ServerSocket server;
@@ -40,7 +42,7 @@ public class Combat extends Thread {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+
         }
 
         socket.close();
@@ -78,6 +80,14 @@ public class Combat extends Thread {
             loser.setHunger(1);
 
         out.println("WIN " + winner.getId());
+        CreatureDao saver;
+        try {
+            saver = new CreatureDao();
+            saver.save(winner);
+            saver.save(loser);
+        } catch (NoConfigFileException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean somebodyDied () {
