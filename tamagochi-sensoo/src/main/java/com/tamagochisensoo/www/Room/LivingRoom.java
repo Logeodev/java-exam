@@ -1,5 +1,8 @@
 package com.tamagochisensoo.www.Room;
 
+import java.io.IOException;
+
+import com.tamagochisensoo.www.App;
 import com.tamagochisensoo.www.Bars.Bar;
 import com.tamagochisensoo.www.Creature.Creature;
 import com.tamagochisensoo.www.Exceptions.NoConfigFileException;
@@ -18,6 +21,7 @@ public class LivingRoom extends Room {
     private Button fightBtn;
     private Button sleepBtn;
     private Button quitBtn;
+    private Button backBtn;
 
     public LivingRoom(double x, double y, double width, double height, Creature creature, Stage stage) {
         super(x, y, width, height, stage);
@@ -29,8 +33,9 @@ public class LivingRoom extends Room {
         makeSleepButton();
         makeJoinFightButton();
         makeQuitButton();
+        makeReturnLauncherBtn();
 
-        this.pane.getChildren().addAll(feedBtn, sleepBtn, fightBtn, quitBtn, creature.getPane());
+        this.pane.getChildren().addAll(feedBtn, sleepBtn, fightBtn, quitBtn, backBtn, creature.getPane());
         for (Bar bar : creature.getBars()) {
             bar.getPane().setLayoutX(10);
             pane.getChildren().add(bar.getPane());
@@ -88,7 +93,7 @@ public class LivingRoom extends Room {
     }
 
     private void makeQuitButton() {
-        quitBtn = new Button("Save and quit game");
+        quitBtn = new Button("Save");
         quitBtn.setLayoutX(600);
         quitBtn.setLayoutY(200);
         quitBtn.setOnAction(evnt -> {
@@ -97,7 +102,19 @@ public class LivingRoom extends Room {
             } catch (NoConfigFileException e) {
                 e.printStackTrace();
             }
-            stage.close();
+        });
+    }
+
+    private void makeReturnLauncherBtn() {
+        backBtn = new Button("Back to Launcher");
+        backBtn.setLayoutX(600);
+        backBtn.setLayoutY(250);
+        backBtn.setOnAction(evnt -> {
+            try {
+                new App().start(stage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 }

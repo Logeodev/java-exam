@@ -53,8 +53,16 @@ public class JoiningFightRoom extends Room{
         joinBtn.disableProperty().bind(
             Bindings.size(lv.getSelectionModel().getSelectedItems()).isNotEqualTo(2)
         );
+
+        Button backBtn = new Button("Back to creature");
+        backBtn.setOnAction(evnt -> {
+            new LivingRoom(0, 0, 800, 800, lv.getSelectionModel().getSelectedItem(), stage);
+        });
+        backBtn.disableProperty().bind(
+            Bindings.size(lv.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
+        );
         
-        vb.getChildren().addAll(serverLabel, lv, joinBtn);
+        vb.getChildren().addAll(serverLabel, lv, joinBtn, backBtn);
         vb.setSpacing(5);
         vb.setLayoutX(300);
         vb.setLayoutY(150);
