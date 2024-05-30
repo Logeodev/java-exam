@@ -14,7 +14,7 @@ import javafx.beans.value.ObservableValue;
 
 import com.tamagochisensoo.www.Controllers.Combat;
 import com.tamagochisensoo.www.Creature.Creature;
-import com.tamagochisensoo.www.Exceptions.FightNotFoundException;
+import com.tamagochisensoo.www.Exceptions.FightNotCreatedException;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
@@ -117,7 +117,7 @@ public class CombatRoom extends Room {
             }
             System.out.println(winner);
             
-        } catch (FightNotFoundException fnf) {
+        } catch (FightNotCreatedException fnf) {
 
         } catch (UnknownHostException uhe) {
 

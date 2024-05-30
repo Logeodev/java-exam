@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tamagochisensoo.www.Creature.Creature;
-import com.tamagochisensoo.www.Exceptions.FightNotFoundException;
+import com.tamagochisensoo.www.Exceptions.FightNotCreatedException;
 import com.tamagochisensoo.www.Exceptions.NoConfigFileException;
 import com.tamagochisensoo.www.JDBC.daos.CreatureDao;
 
@@ -16,11 +16,11 @@ public class Combat extends Thread {
     private PrintWriter out;
     private List<Creature> adversaries;
 
-    public Combat(int port, Creature adv1, Creature adv2) throws FightNotFoundException {
+    public Combat(int port, Creature adv1, Creature adv2) throws FightNotCreatedException {
         try {
             this.server = new ServerSocket(port);
         } catch (IOException e) {
-            throw new FightNotFoundException(Integer.toString(port));
+            throw new FightNotCreatedException(Integer.toString(port));
         }
         this.adversaries = new ArrayList<>();
         adversaries.add(adv1);
