@@ -17,8 +17,10 @@ import com.tamagochisensoo.www.Creature.Creature;
 import com.tamagochisensoo.www.Exceptions.FightNotCreatedException;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class CombatRoom extends Room {
@@ -87,6 +89,13 @@ public class CombatRoom extends Room {
     
     public void startCombat() {
         int servPort = 9254;
+
+        Label powerLabel = new Label();
+        powerLabel.setFont(new Font("Arial", 30));
+        powerLabel.setTextFill(Color.RED);
+        powerLabel.setLayoutY(350);
+        Platform.runLater(() -> pane.getChildren().add(powerLabel));
+
         try {
             fightInstance = new Combat(servPort, creatures[0], creatures[1]);
             socket = new Socket("localhost", servPort);
@@ -99,12 +108,25 @@ public class CombatRoom extends Room {
 
             String line;
             double winnerId = -1;
+            boolean[] onLeft = {false};
             while (
                 (line = reader.readLine()) != null
             ) {
                 System.out.println(line);
                 if (line.contains("WIN")) {
                     winnerId = Double.parseDouble(line.substring(4));
+                } else if (line.contains("Power = ")) {
+                    double pwr = Double.parseDouble(line.substring(8));
+                    Platform.runLater(() -> {
+                        powerLabel.setText("-" + pwr);
+                        if (onLeft[0]) {
+                            powerLabel.setLayoutX(30);
+                            onLeft[0] = false;
+                        } else {
+                            powerLabel.setLayoutX(600);
+                            onLeft[0] = true;
+                        }
+                    });
                 }
             }
 
