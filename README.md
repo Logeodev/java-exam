@@ -188,6 +188,8 @@ App .. CombatRoom
 
 ## JDBC
 
+> Ne pas oublier de lancer le `docker compose up -d --wait` avant de lancer le jeu !
+
 La base de donnée MySQL de _Tamagochi Sensoo_ est simple, elle consiste en 2 classes simples, reflétés dans une table chacune : 
 
 ```mermaid
