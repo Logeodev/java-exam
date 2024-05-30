@@ -39,6 +39,7 @@ public class App extends Application {
         // Creates the first view, the launcher
 
         VBox launcherLayout = new VBox();
+
         Button startGameButton = new Button("Start New Game");
         startGameButton.setOnAction(e -> {
             showPersonalizationScreen(stage);
@@ -65,6 +66,7 @@ public class App extends Application {
         if (sl != null) {
             launcherLayout.getChildren().add(sl);
         }
+        launcherLayout.setSpacing(10);
         Scene launcherScene = new Scene(launcherLayout, 800, 800);
         stage.setTitle("Tamagochi Sensoo Launcher");
         stage.setScene(launcherScene);
@@ -105,6 +107,7 @@ public class App extends Application {
         });
 
         personalizationLayout.getChildren().addAll(shapeCbb, colorPicker, startGame);
+        personalizationLayout.setSpacing(10);
 
         scene = new Scene(personalizationLayout, 800,800);
         stage.setTitle("Creature Personalization");
