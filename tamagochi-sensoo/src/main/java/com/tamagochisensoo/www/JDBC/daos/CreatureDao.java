@@ -65,7 +65,7 @@ public class CreatureDao extends DatabaseConnection {
                     if (generatedKeys.next()) {
                         return generatedKeys.getDouble(1);
                     } else {
-                        throw new SQLException("Creating place failed, no ID obtained.");
+                        throw new SQLException("Creating creature failed, no ID obtained.");
                     }
                 }
             }

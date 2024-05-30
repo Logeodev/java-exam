@@ -2,6 +2,8 @@ package com.tamagochisensoo.www.Controllers;
 
 import java.io.*;
 import java.net.*;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,8 @@ import com.tamagochisensoo.www.Creature.Creature;
 import com.tamagochisensoo.www.Exceptions.FightNotCreatedException;
 import com.tamagochisensoo.www.Exceptions.NoConfigFileException;
 import com.tamagochisensoo.www.JDBC.daos.CreatureDao;
+import com.tamagochisensoo.www.JDBC.daos.Win;
+import com.tamagochisensoo.www.JDBC.daos.WinDao;
 
 public class Combat extends Thread {
     private ServerSocket server;
@@ -78,6 +82,7 @@ public class Combat extends Thread {
             winner.setConfort(100);
             loser.setConfort(1);
             loser.setHunger(1);
+            loser.setLife(0);
 
         out.println("WIN " + winner.getId());
         CreatureDao saver;
@@ -85,6 +90,16 @@ public class Combat extends Thread {
             saver = new CreatureDao();
             saver.save(winner);
             saver.save(loser);
+        } catch (NoConfigFileException e) {
+            e.printStackTrace();
+        }
+        WinDao scoreSaver;
+        try {
+            scoreSaver = new WinDao();
+            Win w = new Win();
+            w.creature_id = winner.getId();
+            w.date_win = Date.valueOf(LocalDate.now());
+            scoreSaver.addWin(w);
         } catch (NoConfigFileException e) {
             e.printStackTrace();
         }
