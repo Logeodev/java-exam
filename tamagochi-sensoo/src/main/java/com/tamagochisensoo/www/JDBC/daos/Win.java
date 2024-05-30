@@ -6,4 +6,9 @@ public class Win {
     public double id;
     public double creature_id;
     public Date date_win;
+
+    @Override
+    public String toString() {
+        return "Creature " + creature_id + " : " + date_win;
+    }
 }

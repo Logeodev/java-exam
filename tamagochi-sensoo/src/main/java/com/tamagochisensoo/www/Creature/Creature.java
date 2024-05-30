@@ -104,7 +104,7 @@ public class Creature {
     // --- METHODS ---
     @Override
     public String toString() {
-        return this.shape.name() + " : " + 
+        return this.id + " : " + 
         "HP " + this.life + "/FP " + this.hunger + "/CP " + this.confort;
     }
 

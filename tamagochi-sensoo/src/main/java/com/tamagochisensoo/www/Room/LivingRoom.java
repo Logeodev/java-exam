@@ -31,8 +31,9 @@ public class LivingRoom extends Room {
         makeQuitButton();
 
         this.pane.getChildren().addAll(feedBtn, sleepBtn, fightBtn, quitBtn, creature.getPane());
-        for (Bar bars : creature.getBars()) {
-            pane.getChildren().add(bars.getPane());
+        for (Bar bar : creature.getBars()) {
+            bar.getPane().setLayoutX(10);
+            pane.getChildren().add(bar.getPane());
         }
 
         Scene scene = new Scene(this.pane, 800,800);

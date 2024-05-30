@@ -191,7 +191,7 @@ La table `Creature` sert simplement à la sauvegarde de l'état des créatures d
 - `ListView<Creature> makeListView()`, une surcouche de `listCreatures()` pour formatter les résultat vers JavaFX.
 - `void deleteFromId(double id)`, supprimer une créature.
 
-Dans la table `Win`, on stocke les gagnant de chaque combat, à l'aide de la classe `WinDao`. Cette dernière implémente le tri par date des victoires, pour créer un tableau des scores (voir `getWins()`).
+Dans la table `Win`, on stocke les gagnant de chaque combat, à l'aide de la classe `WinDao`. Cette dernière implémente le tri par date des victoires, pour créer un tableau des scores (voir `getWins()`). On nottera particulièrement son utilisation dans le launcher et sa méthode `showScores()`, qui réalise une aggrégation de comptage : on sait par leur identifiants quelle créature à gagné combien de combats.
 
 Afin d'encapsuler la création de connection avec le connecteur MySQL, nous avons en plus une classe `DatabaseConnection`, qui, en temps que classe mère des classes de DAO, fournit une simple méthode `getConnection()` qui nous permet de réaliser plus rapidement les requêtes vers la BDD.
 

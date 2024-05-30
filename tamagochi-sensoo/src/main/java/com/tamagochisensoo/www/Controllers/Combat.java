@@ -60,11 +60,13 @@ public class Combat extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            double power = adversaries.get(i).getAttackPower();
-            out.println("Power = " + power);
-            adversaries.get((i+1)%2).setLife(
-                adversaries.get((i+1)%2).getLife() - power
-            );
+            if (!somebodyDied()) {
+                double power = adversaries.get(i).getAttackPower();
+                out.println("Power = " + power);
+                adversaries.get((i+1)%2).setLife(
+                    adversaries.get((i+1)%2).getLife() - power
+                );
+            }
         }
     }
 
