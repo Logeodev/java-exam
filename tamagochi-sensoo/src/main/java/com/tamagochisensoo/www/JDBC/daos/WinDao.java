@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import com.tamagochisensoo.www.Exceptions.NoConfigFileException;
@@ -49,6 +50,12 @@ public class WinDao extends DatabaseConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        wins.sort(new Comparator<Win>() {
+            @Override
+            public int compare(Win w1, Win w2) {
+                return w1.date_win.compareTo(w2.date_win);
+            }
+        });
         return wins;
     }
 }
