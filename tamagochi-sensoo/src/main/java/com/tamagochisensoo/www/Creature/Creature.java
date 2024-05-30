@@ -171,6 +171,7 @@ public class Creature {
             new KeyFrame(
                 Duration.seconds(5), 
                 event -> {
+                    // altenatively decrease confort or hunger
                     boolean looseConfort = rnd.nextBoolean();
                     if (looseConfort) {
                         setConfort(confort - 10);
@@ -183,7 +184,8 @@ public class Creature {
                             setHunger(0);
                         }
                     }
-                    if ((this.hunger < 10 || this.confort < 8) && rnd.nextBoolean()) {
+                    // loose life if hunger or confort are too low
+                    if ((this.hunger < 10 || this.confort < 10) && rnd.nextBoolean()) {
                         setLife(life - 5);
                         if (this.life < 0) {
                             setLife(0);

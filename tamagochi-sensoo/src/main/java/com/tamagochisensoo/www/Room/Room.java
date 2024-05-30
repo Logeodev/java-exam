@@ -6,6 +6,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public abstract class Room {
+    // Standardizes the view controllers
+
     protected Rectangle background;
     protected Stage stage;
     protected Pane pane;

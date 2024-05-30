@@ -50,6 +50,7 @@ public class WinDao extends DatabaseConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        // order by date
         wins.sort(new Comparator<Win>() {
             @Override
             public int compare(Win w1, Win w2) {

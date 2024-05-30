@@ -8,8 +8,6 @@ Le joueur doit s'occuper d'une créature personnalisée (couleur et forme simple
 
 Un combat permet de faire s'affronter 2 créatures. Celui-ci est automatique et basé sur la chance ainsi que les statistiques des créatures à l'entrée en combat. On leur définit donc une puissance d'attaque qui sera la plus haute si ses 3 barres sont au maximum, cette puissance sera toujours pondérée aléatoirement, en tour par tour des deux créatures. En cas de victoire, le moral est remis au maximum, tandis que si on perd, le moral tombe bas. Les 2 participants perdent en barre de faim à la fin du combat, et en vie selon les attaques prises. Le joueur revient à la créature perdante une fois l'instance de combat terminée, pour penser ses plaies.
 
-Qu'importe la raison (barres de faim ou de vie à 0) ou perte d'un combat, la créature revient avec sa vie à 10% et ses autres barres à 1%. Proportionnelement, une barre de confort faible augmente la vitesse de faim, une barre de faim à moins de 10% augmente la vitesse de perte de vie.
-
 ## Conception
 
 > On utilise la syntaxe de diagrammes Mermaid : [documentation ClassDiagram](https://mermaid.js.org/syntax/classDiagram.html#class-diagrams). Il est notamment décrit la symbolique utilisée
@@ -26,6 +24,7 @@ class CreatureShape {
 }
 
 class Creature {
+    -double id
     -Color color
     -CreatureShape shape
     -double life
@@ -68,15 +67,16 @@ class CreatureBean {
     +double confort
 }
 
-class WinBean {
+class Win {
     <<bean>>
+    +long id
     +long creatureId
     +date date_win
 }
 
 Creature --> CreatureBean : stores state\nin BD
-Combat --> WinBean : stores win\ninDB
-CreatureBean .. WinBean : winning list
+Combat --> Win : stores win\ninDB
+CreatureBean .. Win : winning list
 ```
 
 ### Classes graphiques
@@ -127,25 +127,50 @@ class LivingRoom {
     -Creature creature
     -Button feedBtn
     -Button fightBtn
+    -Button sleepBtn
+    -Button quitBtn
+    -Button backBtn
 
-    +LivingRoom(double x, double y, double width, double height, Creature creature)
+    +LivingRoom(double x, double y, double width, double height, Creature creature, Stage stage)
     +Color getBackgroundColor()
     -void makeFeedingButton()
     -void makeJoinFightButton()
+    -void makeSleepButton()
+    -void makeQuitButton()
+    -void makeReturnLauncherBtn()
 }
 
 LivingRoom <|-- Room
 
 class CombatRoom {
-    +CombatRoom(double x, double y, double width, double height)
+    -Combat fightInstance
+    -Socket socket
+    -BufferedReader reader
+    -Creature[] creatures
+    -Creature winner
+    -Creature loser
+    -BooleanProperty isFightOver
+
+    +CombatRoom(Creature[] creatures, double x, double y, double width, double height, Stage stage)
     +Color getBackgroundColor()
+    +void startCombat()
+    -void makeFightScene()
+    -void closeCombat()
 }
 
 CombatRoom <|-- Room
 
+class JoiningFightRoom {
+    +JoiningFightRoom(double x, double y, double width, double height, Stage stage)
+    +Color getBackgroundColor()
+    -void makeJoinPage()
+
+}
+
+JoiningFightRoom <|-- Room
+
 class App {
     -Scene scene
-    -Room currentRoom
 
     +void main()
     +void start(Stage stage)
@@ -230,6 +255,6 @@ class Combat {
 
 Les packages `Room` et `Bars` contiennent des classes qu'on peut appeler respectivement _controlleur de vue_ et _controlleur de composant_.
 
-En effet, `Room` et ses descendantes, vont gérer l'écran principal et son contenu. Dans une LivingRoom, on s'occupe d'une créature, dans une CombatRoom on voit le combat se dérouler et dans une JoiningFightRoom, on montre la séléction des créatures qui devront combattre (lien entre LivingRoom et CombatRoom).
+En effet, `Room` et ses descendantes, vont gérer l'écran principal et son contenu. Dans une LivingRoom, on s'occupe d'une créature, dans une CombatRoom on voit le combat se dérouler et dans une JoiningFightRoom, on montre la sélection des créatures qui devront combattre (lien entre LivingRoom et CombatRoom).
 
 Tandis que le controlleur `Bar` et ses descendantes vont gérer l'état et l'affichage des différentes barres d'état : barre de vie, de confort et de faim.

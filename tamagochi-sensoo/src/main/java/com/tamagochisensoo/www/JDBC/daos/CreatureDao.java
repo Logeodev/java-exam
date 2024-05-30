@@ -26,6 +26,8 @@ public class CreatureDao extends DatabaseConnection {
     }
     
     public double save(Creature creature) {
+        // either insert creature or update it if already saved once
+
         try (Connection conn = getConnection()) {
             String selectSql = "SELECT id FROM Creature WHERE id = ?";
             PreparedStatement selectStmt = conn.prepareStatement(selectSql);
@@ -76,6 +78,8 @@ public class CreatureDao extends DatabaseConnection {
     }
 
     public List<Creature> listCreatures() {
+        // Retrieve all creatures from DB
+
         List<Creature> creatures = new ArrayList<Creature>();
         try (Connection conn = getConnection()) {
             String sql = "SELECT * FROM Creature";
@@ -97,6 +101,7 @@ public class CreatureDao extends DatabaseConnection {
     }
 
     public ListView<Creature> makeListView() {
+        // Same as listCreatures but outputs a displayable JavaFX format
         class CreatureCell extends ListCell<Creature> {
             @Override
             public void updateItem(Creature item, boolean empty) {

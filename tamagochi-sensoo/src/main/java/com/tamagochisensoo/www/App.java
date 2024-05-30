@@ -36,6 +36,8 @@ public class App extends Application {
     }
 
     private void showLauncherScreen(Stage stage) {
+        // Creates the first view, the launcher
+
         VBox launcherLayout = new VBox();
         Button startGameButton = new Button("Start New Game");
         startGameButton.setOnAction(e -> {
@@ -70,6 +72,8 @@ public class App extends Application {
     }
 
     private void startGame(Stage stage, Creature c) {
+        // Enter a LivingRoom with given creature
+
         currentRoom = new LivingRoom(0, 0, 800, 800, c, stage);
 
         StackPane root = new StackPane();
@@ -82,6 +86,8 @@ public class App extends Application {
     }
 
     private void showPersonalizationScreen(Stage stage) {
+        // creature personnalization before game starts
+
         VBox personalizationLayout = new VBox();
 
         ComboBox<CreatureShape> shapeCbb = new ComboBox<>();
@@ -107,6 +113,7 @@ public class App extends Application {
     }
 
     private void showResumeGameScreen(Stage stage) {
+        // Resume a game by selecting a saved creature from the displayed list
 
         try {
             VBox vb = new VBox();
@@ -132,13 +139,17 @@ public class App extends Application {
     }
 
     private ListView<String> showScores() throws NoConfigFileException {
+        // Count wins per creatures, from saved win logs in DB
+
         List<Win> scores = new WinDao().getWins();
+        // count aggregation
         ObservableMap<Object, Long> obsScoresMap = FXCollections.observableMap(
             scores.stream()
                 .collect(
                     Collectors.groupingBy(elmt -> elmt.creature_id, Collectors.counting())
                     )
         );
+        // format displaying screen for score board
         ObservableList<String> obsScoresList = FXCollections.observableArrayList();
         obsScoresMap.forEach((id, count) -> obsScoresList.add(id + " : " + count + " combats gagnés."));
         ListView<String> scoresList = new ListView<String>(obsScoresList);

@@ -39,6 +39,8 @@ public class CombatRoom extends Room {
         this.isFightOver = new SimpleBooleanProperty(false);
 
         makeFightScene();
+
+        // start the combat, reads incoming socket messages, in a background process
         Thread actionsThread = new Thread() {
             @Override
             public void run() {
@@ -47,6 +49,8 @@ public class CombatRoom extends Room {
             }
         };
         actionsThread.start();
+
+        // listener on the end of the fight
         this.isFightOver.addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> obs, Boolean oldVal, Boolean newVal) {
@@ -54,6 +58,7 @@ public class CombatRoom extends Room {
                     actionsThread.interrupt();
                     closeCombat();
                     if (loser != null) {
+                        // fight is over, back on the losing creature's view
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -76,10 +81,12 @@ public class CombatRoom extends Room {
     }
 
     private void makeFightScene() {
+        // displays fighting creatures and their stats bars
+
         HBox barsBox = new HBox(800);
         for (int i = 0; i < creatures.length; i++) {
             Creature creature = creatures[i];
-            creature.setPosX(creature.getPosX() + Math.pow(-1, i) * 300);
+            creature.setPosX(creature.getPosX() - Math.pow(-1, i) * 300);
             pane.getChildren().add(creature.getPane());
             barsBox.getChildren().add(creature.getBars()[0].getPane());
         }
@@ -90,6 +97,7 @@ public class CombatRoom extends Room {
     public void startCombat() {
         int servPort = 9254;
 
+        // a label to display how much life a creature losses
         Label powerLabel = new Label();
         powerLabel.setFont(new Font("Arial", 30));
         powerLabel.setTextFill(Color.RED);
@@ -97,6 +105,7 @@ public class CombatRoom extends Room {
         Platform.runLater(() -> pane.getChildren().add(powerLabel));
 
         try {
+            // start Fight server that will handle all calculations
             fightInstance = new Combat(servPort, creatures[0], creatures[1]);
             socket = new Socket("localhost", servPort);
             reader = new BufferedReader(
@@ -109,13 +118,16 @@ public class CombatRoom extends Room {
             String line;
             double winnerId = -1;
             boolean[] onLeft = {false};
+            // read from server socker
             while (
                 (line = reader.readLine()) != null
             ) {
                 System.out.println(line);
                 if (line.contains("WIN")) {
+                    // end of the game
                     winnerId = Double.parseDouble(line.substring(4));
                 } else if (line.contains("Power = ")) {
+                    // a new attack has been made, display it
                     double pwr = Double.parseDouble(line.substring(8));
                     Platform.runLater(() -> {
                         powerLabel.setText("-" + pwr);

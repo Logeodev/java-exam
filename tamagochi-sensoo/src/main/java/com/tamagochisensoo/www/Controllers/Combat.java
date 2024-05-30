@@ -32,6 +32,8 @@ public class Combat extends Thread {
     }
 
     public void doCombat() throws IOException {
+        // runs the global fight sequence
+
         socket = server.accept();
         out = new PrintWriter(
             socket.getOutputStream(), true
@@ -54,6 +56,7 @@ public class Combat extends Thread {
     }
 
     public void combatStep() {
+        // runs each fight round for each of the creatures
         for (int i = 0; i < 2; i++) {
             try {
                 Thread.sleep(2000);
@@ -61,6 +64,7 @@ public class Combat extends Thread {
                 e.printStackTrace();
             }
             if (!somebodyDied()) {
+                // continue to attack if none of the adversaries are dead
                 double power = adversaries.get(i).getAttackPower();
                 out.println("Power = " + power);
                 adversaries.get((i+1)%2).setLife(
@@ -81,12 +85,14 @@ public class Combat extends Thread {
             .filter(adv -> adv.getLife() <= 0)
             .findFirst()
             .get();
-            winner.setConfort(100);
-            loser.setConfort(1);
-            loser.setHunger(1);
-            loser.setLife(0);
+        winner.setConfort(100);
+        loser.setConfort(1);
+        loser.setHunger(1);
+        loser.setLife(0);
 
         out.println("WIN " + winner.getId());
+
+        // save the creatures state
         CreatureDao saver;
         try {
             saver = new CreatureDao();
@@ -95,6 +101,8 @@ public class Combat extends Thread {
         } catch (NoConfigFileException e) {
             e.printStackTrace();
         }
+
+        // save the outcome of the fight
         WinDao scoreSaver;
         try {
             scoreSaver = new WinDao();

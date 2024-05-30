@@ -10,6 +10,8 @@ import org.ini4j.InvalidFileFormatException;
 import com.tamagochisensoo.www.Exceptions.NoConfigFileException;
 
 public class DatabaseConnection {
+    // Standardizes the way we connect to the MySQL DB
+    
     private Ini config;
     protected final String url;
     protected final String username;

@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public abstract class Bar {
+    // Standard Bar class to handle a creatures stats 
+
     protected DoubleProperty valueProperty;
     protected Rectangle background;
     protected Rectangle bar;
@@ -35,6 +37,7 @@ public abstract class Bar {
         this.pane.getChildren().addAll(this.background, this.bar);
     }
 
+    // specifies the color of the bar to display 
     protected abstract Color getColor();
 
     public void setValue(double value) {
